@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_coordinator_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.activities.CharacterActivity"
+    tools:ignore="contentDescription">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_primary"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/color_primary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <ImageView
+                android:id="@+id/house_icon_img"
+                android:layout_width="match_parent"
+                android:layout_height="540dp"
+                android:fitsSystemWindows="true"
+                android:src="@drawable/targarien"
+                app:layout_collapseMode="parallax"
+                android:scaleType="centerCrop" />
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:theme="@style/AppTheme.PopupOverlay"
+                app:layout_collapseMode="pin"
+                app:theme="@style/ToolBarStyle"
+                app:titleTextColor="@color/white" />
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:background="@color/gray_light">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="3">
+
+                <!-- Words -->
+                <ImageView
+                    style="@style/icon"
+                    android:src="@drawable/ic_item_brown_24dp" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.words" />
+
+                <TextView
+                    android:id="@+id/character_words_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Born -->
+                <ImageView
+                    style="@style/icon"
+                    android:src="@drawable/ic_item_brown_24dp" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.born" />
+
+                <TextView
+                    android:id="@+id/character_born_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Died -->
+                <ImageView
+                    style="@style/icon"
+                    android:src="@drawable/ic_item_brown_24dp" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.died" />
+
+                <TextView
+                    android:id="@+id/character_died_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Titles -->
+                <ImageView
+                    style="@style/icon"
+                    android:src="@drawable/ic_item_brown_24dp" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.titles" />
+
+                <TextView
+                    android:id="@+id/character_titles_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Aliases -->
+                <ImageView
+                    style="@style/icon"
+                    android:src="@drawable/ic_item_brown_24dp" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.aliases" />
+
+                <TextView
+                    android:id="@+id/character_aliases_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Father -->
+                <ImageView style="@style/icon" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.father" />
+
+                <TextView
+                    android:id="@+id/character_father_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+
+                <!-- Mother -->
+                <ImageView style="@style/icon" />
+
+                <TextView
+                    style="@style/text"
+                    android:text="@string/character.mother" />
+
+                <TextView
+                    android:id="@+id/character_mother_txt"
+                    style="@style/text.value"
+                    android:text="@string/text.default" />
+            </GridLayout>
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>
+

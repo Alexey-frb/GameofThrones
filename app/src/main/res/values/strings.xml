@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Game of Thrones</string>
+    <string name="text.default">-</string>
+    <string name="character.words">Words:</string>
+    <string name="character.born">Born:</string>
+    <string name="character.died">Died:</string>
+    <string name="character.titles">Titles:</string>
+    <string name="character.aliases">Aliases:</string>
+    <string name="character.father">Father:</string>
+    <string name="character.mother">Mother:</string>
+    <string name="text.lorem_ipsum">Lorem ipsum dolor sit amet, consectetur elit, elit, adipiscing elit, sed</string>
+    <string name="text.name_default">Jonh Show</string>
+    <string name="error.not_response_from_server">Нет ответа от сервера!</string>
+    <string name="error.network_not_available">Сеть на данный момент не доступна, попробуйте позже!</string>
+    <string name="house_name.starks">STARKS</string>
+    <string name="house_name.lannisters">LANNISTERS</string>
+    <string name="house_name.targaryens">TARGARYENS</string>
+    <string name="no_data">---</string>
+</resources>
