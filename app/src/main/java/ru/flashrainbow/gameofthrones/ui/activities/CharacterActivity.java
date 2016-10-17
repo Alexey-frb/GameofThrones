@@ -7,7 +7,9 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,10 +19,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ru.flashrainbow.gameofthrones.R;
 import ru.flashrainbow.gameofthrones.data.managers.DataManager;
+import ru.flashrainbow.gameofthrones.data.storage.models.Character;
 import ru.flashrainbow.gameofthrones.data.storage.models.CharacterDTO;
+import ru.flashrainbow.gameofthrones.data.storage.models.CharacterDao;
+import ru.flashrainbow.gameofthrones.data.storage.models.DaoSession;
 import ru.flashrainbow.gameofthrones.utils.ConstantManager;
 
 public class CharacterActivity extends AppCompatActivity {
+
+    private static final String TAG = "CharacterActivity";
 
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout mCollapsingToolbarLayout;
@@ -41,15 +48,25 @@ public class CharacterActivity extends AppCompatActivity {
     @BindView(R.id.character_aliases_txt)
     TextView mCharacterAliases;
     @BindView(R.id.character_father_txt)
-    TextView mCharacterFather;
+    TextView mCharacterFatherTxt;
     @BindView(R.id.character_mother_txt)
-    TextView mCharacterMother;
+    TextView mCharacterMotherTxt;
+    @BindView(R.id.character_father_btn)
+    Button mCharacterFather;
+    @BindView(R.id.character_mother_btn)
+    Button mCharacterMother;
+
+    private Character mCharacter;
+
+    private DaoSession mDaoSession;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_character);
         ButterKnife.bind(this);
+
+        mDaoSession = DataManager.getInstance().getDaoSession();
 
         setupToolbar();
         initProfileData();
@@ -80,7 +97,7 @@ public class CharacterActivity extends AppCompatActivity {
      * Загрузить данные о персонаже
      */
     private void initProfileData() {
-        CharacterDTO characterDTO = getIntent().getParcelableExtra(ConstantManager.PARCELABLE_KEY);
+        final CharacterDTO characterDTO = getIntent().getParcelableExtra(ConstantManager.PARCELABLE_KEY);
 
         // Определяем герб какого дома загрузить
         int iconResourceId = 0;
@@ -108,10 +125,10 @@ public class CharacterActivity extends AppCompatActivity {
                 .centerCrop()
                 .into(mHouseIcon);
 
-        // Имя персонажа
-        mCollapsingToolbarLayout.setTitle(characterDTO.getName());
         // Лозунг
         mCharacterWords.setText(characterDTO.getWords());
+        // Имя персонажа
+        mCollapsingToolbarLayout.setTitle(characterDTO.getName());
         // Дата рождения
         if (!characterDTO.getBorn().equals("")) {
             mCharacterBorn.setText(characterDTO.getBorn());
@@ -138,20 +155,148 @@ public class CharacterActivity extends AppCompatActivity {
         }
         // Отец
         if (!characterDTO.getFather().equals("")) {
-            mCharacterFather.setText(characterDTO.getFather());
+            String strFather = characterDTO.getFather();
+            strFather = strFather.substring(strFather.lastIndexOf('/') + 1, strFather.length());
+            final Character characterFather = loadCharacterFromDb(Integer.valueOf(strFather));
+
+            mCharacterFather.setVisibility(View.VISIBLE);
+            mCharacterFatherTxt.setVisibility(View.VISIBLE);
+            mCharacterFather.setText(characterFather.getName());
+            mCharacterFather.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showParents(characterFather);
+                }
+            });
         } else {
-            mCharacterFather.setText(R.string.no_data);
+            mCharacterFather.setVisibility(View.INVISIBLE);
+            mCharacterFatherTxt.setVisibility(View.INVISIBLE);
         }
         // Мать
         if (!characterDTO.getMother().equals("")) {
-            mCharacterMother.setText(characterDTO.getMother());
+            String strMother = characterDTO.getMother();
+            strMother = strMother.substring(strMother.lastIndexOf('/') + 1, strMother.length());
+            final Character characterMother = loadCharacterFromDb(Integer.valueOf(strMother));
+
+            mCharacterMother.setVisibility(View.VISIBLE);
+            mCharacterMotherTxt.setVisibility(View.VISIBLE);
+            mCharacterMother.setText(characterMother.getName());
+            mCharacterMother.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showParents(characterMother);
+                }
+            });
         } else {
-            mCharacterMother.setText(R.string.no_data);
+            mCharacterMother.setVisibility(View.INVISIBLE);
+            mCharacterMotherTxt.setVisibility(View.INVISIBLE);
         }
 
         // Если персонаж умер, то выводим номер сезона
         if (!characterDTO.getDied().equals("") && !characterDTO.getTvSeries().equals("")) {
             showSnackbar("died in " + characterDTO.getTvSeries());
+        }
+    }
+
+    /**
+     * Загрузить данные о персонаже из БД
+     *
+     * @param characterId - идентификатор дома
+     */
+    private Character loadCharacterFromDb(int characterId) {
+        mCharacter = new Character();
+        Log.d(TAG, "loadCharacterFromDb: " + characterId);
+        try {
+            // Выборка из БД: персонажи дома по идентификатору
+            mCharacter = mDaoSession.queryBuilder(Character.class)
+                    .where(CharacterDao.Properties.Url.like("%/" + characterId))
+                    .build()
+                    .unique();
+
+            Log.d(TAG, "loadCharacterFromDb: ok");
+
+            return mCharacter;
+        } catch (Exception e) {
+            Log.e(TAG, "loadCharacterFromDb: " + e.getMessage());
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
+     * Отобразить данные о родителе персонажа
+     * @param character - персонаж
+     */
+    private void showParents(Character character) {
+        // Имя персонажа
+        mCollapsingToolbarLayout.setTitle(character.getName());
+        // Дата рождения
+        if (!character.getBorn().equals("")) {
+            mCharacterBorn.setText(character.getBorn());
+        } else {
+            mCharacterBorn.setText(R.string.no_data);
+        }
+        // Дата смерти
+        if (!character.getDied().equals("")) {
+            mCharacterDied.setText(character.getDied());
+        } else {
+            mCharacterDied.setText(R.string.no_data);
+        }
+        // Титулы
+        if (!character.getTitle().equals("")) {
+            mCharacterTitles.setText(character.getTitle());
+        } else {
+            mCharacterTitles.setText(R.string.no_data);
+        }
+        // Звания
+        if (!character.getAliases().equals("")) {
+            mCharacterAliases.setText(character.getAliases());
+        } else {
+            mCharacterAliases.setText(R.string.no_data);
+        }
+        // Отец
+        if (!character.getFather().equals("")) {
+            String strFather = character.getFather();
+            strFather = strFather.substring(strFather.lastIndexOf('/') + 1, strFather.length());
+            final Character characterFather = loadCharacterFromDb(Integer.valueOf(strFather));
+
+            mCharacterFather.setVisibility(View.VISIBLE);
+            mCharacterFatherTxt.setVisibility(View.VISIBLE);
+            mCharacterFather.setText(characterFather.getName());
+            mCharacterFather.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showParents(characterFather);
+                }
+            });
+        } else {
+            mCharacterFather.setVisibility(View.INVISIBLE);
+            mCharacterFatherTxt.setVisibility(View.INVISIBLE);
+        }
+        // Мать
+        if (!character.getMother().equals("")) {
+            String strMother = character.getMother();
+            strMother = strMother.substring(strMother.lastIndexOf('/') + 1, strMother.length());
+            final Character characterMother = loadCharacterFromDb(Integer.valueOf(strMother));
+
+            mCharacterMother.setVisibility(View.VISIBLE);
+            mCharacterMotherTxt.setVisibility(View.VISIBLE);
+            mCharacterMother.setText(characterMother.getName());
+            mCharacterMother.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showParents(characterMother);
+                }
+            });
+        } else {
+            mCharacterMother.setVisibility(View.INVISIBLE);
+            mCharacterMotherTxt.setVisibility(View.INVISIBLE);
+        }
+
+        // Если персонаж умер, то выводим номер сезона
+        if (!character.getDied().equals("") && !character.getTvSeries().equals("")) {
+            showSnackbar("died in " + character.getTvSeries());
         }
     }
 }

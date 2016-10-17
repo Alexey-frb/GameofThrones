@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_coordinator_container"
@@ -29,9 +30,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="540dp"
                 android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
                 android:src="@drawable/targarien"
-                app:layout_collapseMode="parallax"
-                android:scaleType="centerCrop" />
+                app:layout_collapseMode="parallax" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -48,9 +49,9 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/gray_light"
         android:clipToPadding="false"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:background="@color/gray_light">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -136,25 +137,39 @@
                 <ImageView style="@style/icon" />
 
                 <TextView
+                    android:id="@+id/character_father_txt"
                     style="@style/text"
                     android:text="@string/character.father" />
 
-                <TextView
-                    android:id="@+id/character_father_txt"
-                    style="@style/text.value"
-                    android:text="@string/text.default" />
+                <Button
+                    android:id="@+id/character_father_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="@dimen/size_16"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/text.father_name"
+                    android:textSize="@dimen/font_14"
+                    android:theme="@style/AppTheme.Button.Red" />
 
                 <!-- Mother -->
                 <ImageView style="@style/icon" />
 
                 <TextView
+                    android:id="@+id/character_mother_txt"
                     style="@style/text"
                     android:text="@string/character.mother" />
 
-                <TextView
-                    android:id="@+id/character_mother_txt"
-                    style="@style/text.value"
-                    android:text="@string/text.default" />
+                <Button
+                    android:id="@+id/character_mother_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:layout_marginLeft="@dimen/size_16"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/text.mother_name"
+                    android:textSize="@dimen/font_14"
+                    android:theme="@style/AppTheme.Button.Red" />
             </GridLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

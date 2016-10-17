@@ -71,7 +71,7 @@ public class CharacterListActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(R.string.app_name);
+            actionBar.setTitle(R.string.author_name);
         }
     }
 
@@ -151,12 +151,12 @@ public class CharacterListActivity extends AppCompatActivity {
             try {
                 // Выборка из БД: персонажи дома по идентификатору
                 mCharactersInHouse = mDaoSession.queryBuilder(Character.class)
-                        .where(CharacterDao.Properties.Allegiances.like("%" + houseId))
+                        .where(CharacterDao.Properties.Allegiances.like("%/" + houseId))
                         .build()
                         .list();
                 // Выборка из БД: дом по идентификатору
                 mHouse = mDaoSession.queryBuilder(House.class)
-                        .where(HouseDao.Properties.Url.like("%" + houseId))
+                        .where(HouseDao.Properties.Url.like("%/" + houseId))
                         .build()
                         .unique();
                 // Отобразить выбранных персонажей

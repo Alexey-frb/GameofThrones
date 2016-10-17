@@ -16,4 +16,7 @@
     <string name="house_name.lannisters">LANNISTERS</string>
     <string name="house_name.targaryens">TARGARYENS</string>
     <string name="no_data">---</string>
+    <string name="author_name">Алексей Чуркин</string>
+    <string name="text.mother_name">mother_name</string>
+    <string name="text.father_name">father_name</string>
 </resources>
