@@ -2,11 +2,14 @@ package ru.flashrainbow.gameofthrones.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +17,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +40,18 @@ import ru.flashrainbow.gameofthrones.utils.ConstantManager;
 
 public class CharacterListActivity extends AppCompatActivity {
 
+    @BindView(R.id.navigation_drawer)
+    DrawerLayout mNavigationDrawer;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.view_pager_container)
     ViewPager mViewPager;
     @BindView(R.id.tabs_layout)
     TabLayout mTabLayout;
+    @BindView(R.id.navigation_view)
+    NavigationView mNavigationView;
+
+    private TextView mHouseName;
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -52,6 +63,7 @@ public class CharacterListActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         setupToolbar();
+        setupDrawer();
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -59,6 +71,40 @@ public class CharacterListActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    /**
+     * Кнопка Назад - закрыть меню, если открыто
+     */
+    @Override
+    public void onBackPressed() {
+        if (mNavigationDrawer != null && mNavigationDrawer.isDrawerOpen(GravityCompat.START)) {
+            mNavigationDrawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            switch (mViewPager.getCurrentItem()) {
+                case 0:
+                    mNavigationView.setCheckedItem(R.id.house_starks_menu);
+                    mHouseName.setText(getString(R.string.house_name_starks));
+                    break;
+                case 1:
+                    mNavigationView.setCheckedItem(R.id.house_lannisters_menu);
+                    mHouseName.setText(getString(R.string.house_name_lannisters));
+                    break;
+                case 2:
+                    mNavigationView.setCheckedItem(R.id.house_targaryen_menu);
+                    mHouseName.setText(getString(R.string.house_name_targaryens));
+                    break;
+            }
+            mNavigationDrawer.openDrawer(GravityCompat.START);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -72,6 +118,43 @@ public class CharacterListActivity extends AppCompatActivity {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(R.string.author_name);
+        }
+    }
+    /**
+     * Выполнить настройки меню
+     */
+    private void setupDrawer() {
+        mHouseName = (TextView) mNavigationView.getHeaderView(0).findViewById(R.id.house_name_txt);
+
+        if (mNavigationView != null) {
+            mNavigationView.setCheckedItem(R.id.house_starks_menu);
+
+            // Инициализация меню navigation view
+            mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(MenuItem item) {
+                    item.setChecked(true);
+
+                    switch (item.getItemId()) {
+                        case R.id.house_starks_menu:
+                            mViewPager.setCurrentItem(0);
+                            break;
+
+                        case R.id.house_lannisters_menu:
+                            mViewPager.setCurrentItem(1);
+                            break;
+
+                        case R.id.house_targaryen_menu:
+                            mViewPager.setCurrentItem(2);
+                            break;
+                        case R.id.exit_menu:
+                            finish();
+                            break;
+                    }
+                    mNavigationDrawer.closeDrawer(GravityCompat.START);
+                    return false;
+                }
+            });
         }
     }
 
@@ -142,6 +225,7 @@ public class CharacterListActivity extends AppCompatActivity {
 
         /**
          * Загрузить данные о персонажах из БД
+         *
          * @param houseId - идентификатор дома
          */
         private void loadCharactersDataFromDb(int houseId) {
@@ -171,8 +255,9 @@ public class CharacterListActivity extends AppCompatActivity {
 
         /**
          * Отобразить выбранных персонажей
+         *
          * @param characters - выборка с персонажами
-         * @param house - выборка с домом
+         * @param house      - выборка с домом
          */
         private void showCharacter(final List<Character> characters, final House house) {
             mCharacterAdapter = new CharacterAdapter(characters, house, new CharacterAdapter.UserViewHolder.CustomClickListener() {

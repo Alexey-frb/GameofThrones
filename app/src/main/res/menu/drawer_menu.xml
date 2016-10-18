@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/house_starks_menu"
+            android:checkable="true"
+            android:icon="@drawable/ic_item_brown_24dp"
+            android:title="@string/house_name.starks"/>
+        <item
+            android:id="@+id/house_lannisters_menu"
+            android:checkable="true"
+            android:icon="@drawable/ic_item_brown_24dp"
+            android:title="@string/house_name.lannisters"/>
+        <item
+            android:id="@+id/house_targaryen_menu"
+            android:icon="@drawable/ic_item_brown_24dp"
+            android:title="@string/house_name.targaryens"/>
+    </group>
+    <group android:checkableBehavior="none">
+        <item
+            android:id="@+id/exit_menu"
+            android:icon="@drawable/ic_exit_to_app"
+            android:title="@string/menu.exit"/>
+    </group>
+</menu>

@@ -1,40 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_coordinator_container"
+    android:id="@+id/navigation_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".ui.activities.CharacterListActivity">
+    tools:context=".ui.activities.CharacterListActivity"
+    tools:ignore="contentDescription">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_layout"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/main_coordinator_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/color_primary"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/color_primary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/ToolBarStyle" />
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs_layout"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/appbar_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/color_primary"
-            app:tabIndicatorColor="@color/white" />
-    </android.support.design.widget.AppBarLayout>
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/view_pager_container"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/color_primary"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:theme="@style/ToolBarStyle"/>
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_primary"
+                app:tabIndicatorColor="@color/white"/>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/view_pager_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+    </android.support.design.widget.CoordinatorLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_gravity="start"
+        app:headerLayout="@layout/drawer_header"
+        app:menu="@menu/drawer_menu">
+
+    </android.support.design.widget.NavigationView>
+</android.support.v4.widget.DrawerLayout>
