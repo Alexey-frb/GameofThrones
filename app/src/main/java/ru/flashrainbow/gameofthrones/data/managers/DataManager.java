@@ -15,14 +15,12 @@ import ru.flashrainbow.gameofthrones.utils.DevApplication;
 public class DataManager {
     private static DataManager INSTANCE = null;
 
-    private PreferencesManager mPreferencesManager;
     private Context mContext;
 
     private RestService mRestService;
     private DaoSession mDaoSession;
 
     private DataManager() {
-        mPreferencesManager = new PreferencesManager();
         mContext = DevApplication.getContext();
 
         mRestService = ServiceGenerator.createService(RestService.class);
@@ -34,10 +32,6 @@ public class DataManager {
             INSTANCE = new DataManager();
         }
         return INSTANCE;
-    }
-
-    public PreferencesManager getPreferencesManager() {
-        return mPreferencesManager;
     }
 
     public Context getContext() {
