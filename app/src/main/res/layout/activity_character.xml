@@ -28,11 +28,11 @@
             <ImageView
                 android:id="@+id/house_icon_img"
                 android:layout_width="match_parent"
-                android:layout_height="540dp"
+                android:layout_height="@dimen/size_540"
                 android:fitsSystemWindows="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/targarien"
-                app:layout_collapseMode="parallax" />
+                android:src="@drawable/targaryen"
+                app:layout_collapseMode="parallax"/>
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,7 +41,7 @@
                 android:theme="@style/AppTheme.PopupOverlay"
                 app:layout_collapseMode="pin"
                 app:theme="@style/ToolBarStyle"
-                app:titleTextColor="@color/white" />
+                app:titleTextColor="@color/white"/>
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
@@ -58,88 +58,113 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <GridLayout
-                android:layout_width="wrap_content"
+            <!-- Words -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:columnCount="3">
+                android:orientation="horizontal">
 
-                <!-- Words -->
                 <ImageView
                     style="@style/icon"
-                    android:src="@drawable/ic_item_brown_24dp" />
+                    android:src="@drawable/ic_item_brown_24dp"/>
 
                 <TextView
                     style="@style/text"
-                    android:text="@string/character.words" />
+                    android:text="@string/character.words"/>
 
                 <TextView
                     android:id="@+id/character_words_txt"
                     style="@style/text.value"
-                    android:text="@string/text.default" />
+                    android:text="@string/text.default"/>
+            </LinearLayout>
+            <!-- Born -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Born -->
                 <ImageView
                     style="@style/icon"
-                    android:src="@drawable/ic_item_brown_24dp" />
+                    android:src="@drawable/ic_item_brown_24dp"/>
 
                 <TextView
                     style="@style/text"
-                    android:text="@string/character.born" />
+                    android:text="@string/character.born"/>
 
                 <TextView
                     android:id="@+id/character_born_txt"
                     style="@style/text.value"
-                    android:text="@string/text.default" />
+                    android:text="@string/text.default"/>
+            </LinearLayout>
+            <!-- Died -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Died -->
                 <ImageView
                     style="@style/icon"
-                    android:src="@drawable/ic_item_brown_24dp" />
+                    android:src="@drawable/ic_item_brown_24dp"/>
 
                 <TextView
                     style="@style/text"
-                    android:text="@string/character.died" />
+                    android:text="@string/character.died"/>
 
                 <TextView
                     android:id="@+id/character_died_txt"
                     style="@style/text.value"
-                    android:text="@string/text.default" />
+                    android:text="@string/text.default"/>
+            </LinearLayout>
+            <!-- Titles -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Titles -->
                 <ImageView
                     style="@style/icon"
-                    android:src="@drawable/ic_item_brown_24dp" />
+                    android:src="@drawable/ic_item_brown_24dp"/>
 
                 <TextView
                     style="@style/text"
-                    android:text="@string/character.titles" />
+                    android:text="@string/character.titles"/>
 
                 <TextView
                     android:id="@+id/character_titles_txt"
                     style="@style/text.value"
-                    android:text="@string/text.default" />
+                    android:text="@string/text.default"/>
+            </LinearLayout>
+            <!-- Aliases -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Aliases -->
                 <ImageView
                     style="@style/icon"
-                    android:src="@drawable/ic_item_brown_24dp" />
+                    android:src="@drawable/ic_item_brown_24dp"/>
 
                 <TextView
                     style="@style/text"
-                    android:text="@string/character.aliases" />
+                    android:text="@string/character.aliases"/>
 
                 <TextView
                     android:id="@+id/character_aliases_txt"
                     style="@style/text.value"
-                    android:text="@string/text.default" />
+                    android:text="@string/text.default"/>
+            </LinearLayout>
+            <!-- Father -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Father -->
-                <ImageView style="@style/icon" />
+                <ImageView style="@style/icon"/>
 
                 <TextView
                     android:id="@+id/character_father_txt"
                     style="@style/text"
-                    android:text="@string/character.father" />
+                    android:text="@string/character.father"/>
 
                 <Button
                     android:id="@+id/character_father_btn"
@@ -150,15 +175,20 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/text.father_name"
                     android:textSize="@dimen/font_14"
-                    android:theme="@style/AppTheme.Button.Red" />
+                    android:theme="@style/AppTheme.Button.Red"/>
+            </LinearLayout>
+            <!-- Mother -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <!-- Mother -->
-                <ImageView style="@style/icon" />
+                <ImageView style="@style/icon"/>
 
                 <TextView
                     android:id="@+id/character_mother_txt"
                     style="@style/text"
-                    android:text="@string/character.mother" />
+                    android:text="@string/character.mother"/>
 
                 <Button
                     android:id="@+id/character_mother_btn"
@@ -169,8 +199,8 @@
                     android:fontFamily="sans-serif"
                     android:text="@string/text.mother_name"
                     android:textSize="@dimen/font_14"
-                    android:theme="@style/AppTheme.Button.Red" />
-            </GridLayout>
+                    android:theme="@style/AppTheme.Button.Red"/>
+            </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

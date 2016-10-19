@@ -40,6 +40,7 @@ public class BaseActivity extends AppCompatActivity {
         if (mProgressDialog != null) {
             if (mProgressDialog.isShowing()) {
                 mProgressDialog.hide();
+                mProgressDialog.dismiss();
             }
         }
     }
@@ -62,18 +63,5 @@ public class BaseActivity extends AppCompatActivity {
      */
     public void showToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-    }
-
-    /**
-     * Скрыть прогресс-бар с задержкой 5 секунд
-     */
-    private void runWithDelay() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                hideProgress();
-            }
-        }, 5000);
     }
 }

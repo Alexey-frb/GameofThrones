@@ -49,20 +49,24 @@ public class SplashActivity extends BaseActivity {
 
         ButterKnife.bind(this);
 
-        showProgress();
-
         mConnector = new ChronosConnector();
         mConnector.onCreate(this, savedInstanceState);
 
         mDataManager = DataManager.getInstance();
         mDaoSession = mDataManager.getDaoSession();
 
-        //Запрашиваем по сети информацию о трех домах
-        getHouseDataFromNetwork(ConstantManager.TARGARYEN_ID_HOUSES);
-        getHouseDataFromNetwork(ConstantManager.LANNISTER_ID_HOUSES);
-        getHouseDataFromNetwork(ConstantManager.STARK_ID_HOUSES);
-        //Запрашиваем по сети информацию о всех персонажах
-        getCharactersDataFromNetwork(0);
+        showProgress();
+
+        if (NetworkStatusChecker.isNetworkAvailable(this)) {
+            //Запрашиваем по сети информацию о трех домах
+            getHouseDataFromNetwork(ConstantManager.TARGARYEN_ID_HOUSES);
+            getHouseDataFromNetwork(ConstantManager.LANNISTER_ID_HOUSES);
+            getHouseDataFromNetwork(ConstantManager.STARK_ID_HOUSES);
+            //Запрашиваем по сети информацию о всех персонажах
+            getCharactersDataFromNetwork(0);
+        } else {
+            startCharacterListActivity();
+        }
     }
 
     @Override
@@ -97,6 +101,7 @@ public class SplashActivity extends BaseActivity {
 
     /**
      * Получить данные о доме по сети
+     *
      * @param houseId - идентификатор дома
      */
     private void getHouseDataFromNetwork(int houseId) {
@@ -113,10 +118,12 @@ public class SplashActivity extends BaseActivity {
                             mDaoSession.getHouseDao().insertOrReplaceInTx(new House(response.body()));
                         } else {
                             showSnackbar(getString(R.string.error_not_response_from_server));
+                            startCharacterListActivity();
                         }
                     } catch (NullPointerException e) {
                         Log.e(TAG, "onResponse: getHouseDataFromNetwork " + e.toString());
                         showSnackbar(e.toString());
+                        startCharacterListActivity();
                     }
                 }
 
@@ -128,11 +135,13 @@ public class SplashActivity extends BaseActivity {
             });
         } else {
             showSnackbar(getString(R.string.error_network_not_available));
+            startCharacterListActivity();
         }
     }
 
     /**
      * Получить данные о всех персонажах по сети
+     *
      * @param pageNum - номер страницы от 1 до 43
      */
     private void getCharactersDataFromNetwork(int pageNum) {
@@ -161,10 +170,12 @@ public class SplashActivity extends BaseActivity {
                                 getCharactersDataFromNetwork(pageId);
                             } else {
                                 showSnackbar(getString(R.string.error_not_response_from_server));
+                                startCharacterListActivity();
                             }
                         } catch (NullPointerException e) {
                             Log.e(TAG, "onResponse: getCharactersDataFromNetwork " + e.toString());
                             showSnackbar(e.toString());
+                            startCharacterListActivity();
                         }
                     }
 
@@ -172,10 +183,12 @@ public class SplashActivity extends BaseActivity {
                     public void onFailure(Call<List<CharacterRes>> call, Throwable t) {
                         Log.e(TAG, "onFailure: getCharactersDataFromNetwork " + t.getMessage());
                         showSnackbar(t.getMessage());
+                        startCharacterListActivity();
                     }
                 });
             } else {
                 showSnackbar(getString(R.string.error_network_not_available));
+                startCharacterListActivity();
             }
         }
     }
@@ -187,16 +200,27 @@ public class SplashActivity extends BaseActivity {
      */
     @SuppressWarnings("unused")
     public void onOperationFinished(final SaveCharactersDataInDb.Result result) {
-        hideProgress();
-
         if (result.isSuccessful()) {
             Log.d(TAG, "onOperationFinished: SaveCharactersDataInDb successful!");
 
-            Intent characterListIntent = new Intent(SplashActivity.this, CharacterListActivity.class);
-            finish();
-            startActivity(characterListIntent);
+            startCharacterListActivity();
         } else {
+            hideProgress();
             Log.e(TAG, "onOperationFinished: SaveCharactersDataInDb " + result.getErrorMessage());
+            showSnackbar(result.getErrorMessage());
+        }
+    }
+
+    private void startCharacterListActivity() {
+        hideProgress();
+
+        if (mDataManager.isDatabaseEmpty()) {
+            showSnackbar(getString(R.string.error_database_is_empty));
+        } else {
+            Intent characterListIntent = new Intent(SplashActivity.this, CharacterListActivity.class);
+
+            startActivity(characterListIntent);
+            finish();
         }
     }
 }

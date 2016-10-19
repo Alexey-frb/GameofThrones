@@ -20,4 +20,5 @@
     <string name="text.mother_name">mother_name</string>
     <string name="text.father_name">father_name</string>
     <string name="menu.exit">Exit</string>
+    <string name="error.database_is_empty">База данных не содержит необходимых сведений!</string>
 </resources>

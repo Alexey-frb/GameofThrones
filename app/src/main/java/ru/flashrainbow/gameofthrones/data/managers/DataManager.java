@@ -56,5 +56,9 @@ public class DataManager {
     public DaoSession getDaoSession() {
         return mDaoSession;
     }
+
+    public boolean isDatabaseEmpty() {
+        return mDaoSession.getCharacterDao().count() == 0;
+    }
     //endregion
 }

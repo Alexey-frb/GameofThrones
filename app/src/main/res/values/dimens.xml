@@ -4,6 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
+    <dimen name="size_540">540dp</dimen>
     <dimen name="size_172">172dp</dimen>
     <dimen name="size_60">60dp</dimen>
     <dimen name="size_56">56dp</dimen>
